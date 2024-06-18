@@ -4,8 +4,8 @@ https://github.com/sylvetimo2/test/
 
 To build the application using maven 
  1. navigate to each subproject folder and issue command :
- 2. Edit the application.yml to point to your local mysqlDatabase;
- 3. Create database named bookstore on your local Mysql Instance
+ 2. Edit the application.yml to point to your local mysqlDatabase, Replace Localhost with host Ip 
+ 3. Create database named bookstore on your local Mysql Instance  and point the application to the database , The tables will be generated via JPA Annotations
  4. Run command  mvn install  
     To  build the application 
 To Run the application  in predefined order  run command 
