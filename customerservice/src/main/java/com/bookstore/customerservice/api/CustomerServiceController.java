@@ -1,5 +1,8 @@
 package com.bookstore.customerservice.api;
 
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,36 +14,41 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstore.customerservice.dto.CustomerRequest;
 import com.bookstore.customerservice.dto.CustomerResponse;
+import com.bookstore.customerservice.service.CustomerService;
 
-import jakarta.validation.Valid;
-
-@RestController(value = "/customers")
+@RestController
 public class CustomerServiceController {
+	@Autowired
+	private CustomerService customerService;
+
 	/**
 	 * Register a new customer.
 	 */
-	@PostMapping
+	@PostMapping(value = "/customers")
 	public ResponseEntity<CustomerResponse> createCustomer(@Valid @RequestBody CustomerRequest customerRequest) {
-
-		return new ResponseEntity<>(new CustomerResponse(), HttpStatus.CREATED);
+		CustomerResponse customerResponse = customerService.saveCustomer(customerRequest);
+		return new ResponseEntity<>(customerResponse, HttpStatus.OK);
 	}
 
 	/**
 	 * Update customer details.
 	 */
-	@PutMapping
+	@PutMapping(value = "/customers/{id}")
 	public ResponseEntity<CustomerResponse> updateCustomer(@PathVariable(value = "id") long Id,
-			CustomerRequest customerRequest) {
-		return new ResponseEntity<>(new CustomerResponse(), HttpStatus.CREATED);
+			@RequestBody @Valid CustomerRequest customerRequest) {
+		CustomerResponse customerResponse = customerService.updateCustomer(Id, customerRequest);
+
+		return new ResponseEntity<>(customerResponse, HttpStatus.CREATED);
 
 	}
 
 	/**
 	 * Retrieve customer
 	 */
-	@GetMapping
+	@GetMapping(value = "/customers/{id}")
 	public ResponseEntity<CustomerResponse> getCustomer(@PathVariable(value = "id") long id) {
-		return new ResponseEntity<>(new CustomerResponse(), HttpStatus.OK);
+		CustomerResponse customerResponse = customerService.getCustomer(id);
+		return new ResponseEntity<>(customerResponse, HttpStatus.OK);
 
 	}
 

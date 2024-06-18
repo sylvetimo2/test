@@ -1,18 +1,36 @@
 package com.bookstore.bookservice.dto;
 
-import com.bookstore.bookservice.constants.Status;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.bookstore.bookservice.constants.BookStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @JsonFormat
 public class BookResponse {
-	private String bookId;
-	private String authorId;
-	private String bookTitle;
-	private String authorName;
-	private String serialNumber;
+
 	private Status status;
-	private String description;
+	private List<BookRequest> bookRequest;
+
+	@AllArgsConstructor
+	@Data
+	public class Status {
+		BookStatus Status;
+		String description;
+
+		public Status() {
+
+		}
+	}
+
+	public List<BookRequest> getBookRequest() {
+		if (bookRequest == null) {
+			bookRequest = new ArrayList<>();
+		}
+		return bookRequest;
+	}
 }

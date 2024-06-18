@@ -1,8 +1,9 @@
 package com.bookstore.bookservice.dto;
 
+import javax.validation.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
@@ -11,9 +12,9 @@ public class BookRequest {
 	@NotBlank
 	private String bookTitle;
 	@NotBlank
-	private String authorFirstName;
-	@NotBlank
-	private String authorLastName;
+	private String authorName;
+
 	@NotBlank
 	private String serialNumber;
+	private Long bookId;
 }

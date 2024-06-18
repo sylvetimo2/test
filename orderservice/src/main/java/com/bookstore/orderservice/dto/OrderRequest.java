@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 public class OrderRequest {
 	private long customerId;
-	private List<Book> orderedbooks;
+	private List<BookOrder> orderedbooks;
 
 }

@@ -1,7 +1,8 @@
 package com.bookstore.bookservice.api;
 
-import java.util.List;
+import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,51 +15,56 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstore.bookservice.dto.BookRequest;
 import com.bookstore.bookservice.dto.BookResponse;
-import com.bookstore.bookservice.entity.Book;
-
-import jakarta.validation.Valid;
+import com.bookstore.bookservice.service.BookService;
 
 @RestController
 public class BookServiceServiceController {
+	@Autowired
+	private BookService bookService;
+
 	/**
 	 * Add a new book.
 	 */
 	@PostMapping(value = "/books")
 	public ResponseEntity<BookResponse> createBook(@RequestBody @Valid BookRequest bookRequest) {
-		return new ResponseEntity<BookResponse>(new BookResponse(), HttpStatus.CREATED);
+		BookResponse response = bookService.createBook(bookRequest);
+		return new ResponseEntity<BookResponse>(response, HttpStatus.OK);
 	}
 
 	/**
 	 * Update book details.○
 	 */
-	@PutMapping(value = "/books")
-	public ResponseEntity<BookResponse> updateBook(@PathVariable(value = "id") String bookId,
+	@PutMapping(value = "/books/{id}")
+	public ResponseEntity<BookResponse> updateBook(@PathVariable(value = "id") Long bookId,
 			@RequestBody BookRequest bookRequest) {
-		return new ResponseEntity<BookResponse>(new BookResponse(), HttpStatus.ACCEPTED);
+		BookResponse response = bookService.updateBook(bookRequest, bookId);
+		return new ResponseEntity<BookResponse>(response, HttpStatus.OK);
 	}
 
 	/**
 	 * Delete a book.○
 	 */
-	@DeleteMapping(value = "/books")
-	public ResponseEntity<BookResponse> deleteBook(@PathVariable(value = "id") String bookId) {
-		return new ResponseEntity<BookResponse>(new BookResponse(), HttpStatus.ACCEPTED);
+	@DeleteMapping(value = "/books/{id}")
+	public ResponseEntity<BookResponse> deleteBook(@PathVariable(value = "id") long bookId) {
+		BookResponse res = bookService.delete(bookId);
+		return new ResponseEntity<BookResponse>(res, HttpStatus.OK);
 	}
 
 	/**
 	 * Retrieve book
 	 */
-	@GetMapping(value = "/books")
-	public ResponseEntity<BookResponse> getBook(@PathVariable(value = "id") String bookId) {
-		return new ResponseEntity<BookResponse>(new BookResponse(), HttpStatus.ACCEPTED);
+	@GetMapping(value = "/books/{id}")
+	public ResponseEntity<?> getBook(@PathVariable(value = "id") Long bookId) {
+
+		return bookService.getBook(bookId);
 	}
 
 	/**
 	 * List all books
 	 */
 	@GetMapping(value = "/books")
-	public ResponseEntity<List<Book>> getBooks() {
-		List<Book> books = null;
-		return new ResponseEntity<>(books, HttpStatus.OK);
+	public ResponseEntity<?> getBooks() {
+
+		return bookService.getBooks();
 	}
 }
