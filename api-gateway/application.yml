@@ -3,88 +3,30 @@ server:
 spring:
   application:
     name: GATEWAY-SERVICE
-  cloud:
-    consul:
-      host: 172.16.19.205
-      port: 8085
-      enabled: false
-      discovery:
-        instance-id: gateway-service_1
-        # instance-id must not be empty, must start with letter, end wit ha letter or digit, and have as interior characters ony
-        # letter, digits, and hyphen
-        serviceName: ${spring.application.name}
-        # Consul needs this for health-check. Used for load-balancing stuff.
-        healthCheckPath: /actuator/health
-        register: true
-        register-health-check: true
-        deregister: true
-        ip-address: 172.16.19.205
-        prefer-ip-address: true
     gateway:
       discovery:
         locator:
           enabled: true #Enable the function of dynamically creating routes from the regis
       routes:
-        - id: MPESA-B2C-FLOAT
-          # uri: http://172.16.19.205:9001/
-          uri: lb://MPESA-B2C-FLOAT-PURCHASE-SERVICE
+        - id: BOOK-SERVICE
+          uri: lb://BOOK-SERVICE
           predicates:
-            - Path=/mpesa-b2c/**,/callback/mpesa-b2c/**
-        - id: AIRTEL-B2C
-          #uri:  http://172.16.19.205:9002/
-          uri: lb://AIRTEL-B2C-SERVICE
+            - Path=/books/**
+        - id: CUSTOMER-SERVICE
+          uri: lb://CUSTOMER-SERVICE
           predicates:
-            - Path=/airtel-b2c/**
-        - id: TKASH-B2C
-          #uri: http://172.16.19.205:9003/
-          uri: lb://TKASH-B2C-SERVICE
+            - Path=/customers/**
+        - id: ORDER-SERVICE
+          uri: lb://ORDER-SERVICE
           predicates:
-            - Path=/tkash-b2c/**
-        - id: TKASH-C2B
-          #uri: http://172.16.19.205:9004/
-          uri: lb://TKASH-C2B-SERVICE
-          predicates:
-            - Path=/tkash-c2b/**
-        - id: AIRTEL-C2B
-          #uri: http://172.16.19.205:9005/
-          uri: lb://AIRTEL-C2B-SERVICE
-          predicates:
-            - Path=/airtel-c2b/**
-        - id: MPESA-C2B
-          #uri: http://172.16.19.205:9012/
-          uri: lb://MPESA-C2B-SERVICE
-          predicates:
-            - Path=/mpesa-c2b/**
-        - id: FUNDS-TRANSFER-SERVICE
-          #uri: http://172.16.19.205:9006/
-          uri: lb://FUNDS-TRANSFER-SERVICE
-          predicates:
-            - Path=/fundstransfer/**
-        - id: ACCOUNT-VALIDATION-SERVICE
-          #uri: http://172.16.19.205:9007/
-          uri: lb://ACCOUNT-VALIDATION-SERVICE
-          predicates:
-            - Path=/nbk_validate/**
-        - id: TKASH_AIRTIME
-          #uri: http://172.16.19.205:9011/
-          uri: lb://TKASH-AIRTIME-SERVICE
-          predicates:
-            - Path=/tkash-airtime/**
-        - id: EPAY-ENHANCEMENT-SERVICE
-          #uri: http://172.16.19.205:9013/
-          uri: lb://EPAY-ENHANCEMENT-SERVICE
-          predicates:
-            - Path=/epay/**
-        - id: NBKPesaPrintApp
-          #uri: http://172.16.19.205:9110/
-          uri: lb://NBKPesaPrintApp
-          predicates:
-            - Path=/noti/**
+            - Path=/orders/**      
+#SECURITY CONFIGS
   security:
-     oauth2:
+    oauth2:
       resourceserver:
-       jwt:
-        issuer-uri: http://localhost:8099
+        jwt:
+          issuer-uri: http://localhost:8080
+          jwk-set-uri: http://localhost:8080/auth/realms/protocol/openid-connect/jwks
 eureka:
   client:
     service-url:

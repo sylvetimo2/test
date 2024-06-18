@@ -11,11 +11,9 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 public class SecurityConfig {
 	@Bean
 	public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-		http.authorizeExchange()
-				.pathMatchers("/actuator/**", "/callback/**", "/airtel-c2b/**", "/mpesa-c2b/**", "/tkash-c2b/**",
-						"/authorized/**")
-				.permitAll().and().csrf().disable().authorizeExchange().anyExchange().authenticated().and()
-				.oauth2ResourceServer().jwt();
+		http.authorizeExchange(exchange -> exchange.pathMatchers("/actuator/**").permitAll())
+				.csrf(csrf -> csrf.disable().authorizeExchange(exchange -> exchange.anyExchange().authenticated()))
+				.oauth2ResourceServer(server -> server.jwt());
 		// .oauth2Login(); // to redirect to oauth2 login page.
 
 		return http.build();

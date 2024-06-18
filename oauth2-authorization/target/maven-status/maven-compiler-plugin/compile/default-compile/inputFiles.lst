@@ -1,2 +1,3 @@
 D:\sample_test\bookstore\oauth2-authorization\src\main\java\com\test\auth\AuthorizationServerApplication.java
-D:\sample_test\bookstore\oauth2-authorization\src\main\java\com\nbk\auth\config\OAuth2AuthorizationServerConfig.java
+D:\sample_test\bookstore\oauth2-authorization\src\main\java\com\test\auth\config\DefaultSecurityConfig.java
+D:\sample_test\bookstore\oauth2-authorization\src\main\java\com\test\auth\config\AuthorizationServerConfig.java

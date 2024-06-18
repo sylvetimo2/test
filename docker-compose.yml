@@ -1,0 +1,96 @@
+version: '3.6'
+
+services:
+  servicediscovery:
+    container_name: servicediscovery
+    build:
+      context: discovery
+      dockerfile: Dockerfile
+    image: servicediscovery:latest
+    restart: "unless-stopped"
+    environment:
+      TZ: Africa/Nairobi
+    networks:
+      - book-store-net
+  oauth2-authorization:
+    container_name: oauth2-authorization
+    build:
+      context: oauth2-authorization
+      dockerfile: Dockerfile
+    image: oauth2-authorization:latest
+    restart: "no"
+    depends_on:
+      - servicediscovery
+    environment:
+      TZ: Africa/Nairobi
+    ports:
+      - '8080:8080'
+    networks:
+      - book-store-net
+
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: api-gateway
+      dockerfile: Dockerfile
+    image: api-gateway:latest
+    restart: "no"
+    depends_on:
+      - servicediscovery
+      - oauth2-authorization
+    environment:
+      TZ: Africa/Nairobi
+    ports:
+      - '8086:8086'
+    networks:
+      - book-store-net
+  bookservice:
+    container_name: bookservice
+    build:
+      context: bookservice
+      dockerfile: Dockerfile
+    image: bookservice:latest
+    restart: "no"
+    depends_on:
+      - servicediscovery
+      - oauth2-authorization
+    environment:     
+      TZ: Africa/Nairobi      
+    ports:
+      - '8081:8081'
+    networks:
+      - book-store-net
+  customerservice:
+    container_name: customerservice
+    build:
+      context: customerservice
+      dockerfile: Dockerfile
+    image: customerservice:latest
+    restart: "no"
+    depends_on:
+      - servicediscovery
+      - oauth2-authorization
+    environment:     
+      TZ: Africa/Nairobi      
+    ports:
+      - '8082:8082'
+    networks:
+      - book-store-net
+  orderservice:
+    container_name: orderservice
+    build:
+      context: orderservice
+      dockerfile: Dockerfile
+    image: orderservice:latest
+    restart: "no"
+    depends_on:
+      - servicediscovery
+      - oauth2-authorization
+    environment:     
+      TZ: Africa/Nairobi      
+    ports:
+      - '8083:8083'
+    networks:
+      - book-store-net
+networks:
+  book-store-net:
